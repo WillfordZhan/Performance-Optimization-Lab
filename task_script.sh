@@ -55,15 +55,34 @@ function task_1_1()
 }
 
 function task_1_2()
-{
-    for crypt_num in {1..8} do
-        for i in {1..5} do
-            suffix=${crypt_num}_${i}run_txt
-            echo $suffix
-            # stress-ng --crypt $crypt_num --metrics-brief --perf -t 10s &
-            wait
+{   
+    dir="./task_4_1_2"
+    
+    if [[ $1 == "-crypt-ops" ]]; then
+        for crypt_num in {1..8} 
+        do
+            for i in {1..5} 
+            do
+                suffix=/crypt-ops/cryptops_${crypt_num}_${i}run.txt
+                # run with crypt-ops
+                str_file=${dir}${suffix}
+                stress-ng --crypt $crypt_num --crypt-ops 8000 --metrics-brief --perf -t 10s --log-file $str_file &
+                wait
+            done
         done
-    done
+    else
+        for crypt_num in {1..8} 
+        do
+            for i in {1..5} 
+            do
+                suffix=/crypt/crypt_${crypt_num}_${i}run.txt
+                str_file=${dir}${suffix}
+                # run simple crypt
+                stress-ng --crypt $crypt_num --metrics-brief --perf -t 10s --log-file $str_file &
+                wait
+            done
+        done
+    fi
     exit 1
 }
 
