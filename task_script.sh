@@ -180,7 +180,8 @@ function task_3_1()
             suffix=/hdd/hdd_${i}.txt
             str_file=${dir}${suffix}
             # run without sync
-            stress-ng --hdd N --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
+            stress-ng --hdd $i --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
+            echo $str_file
             wait
         done
     else
@@ -189,7 +190,9 @@ function task_3_1()
             suffix=/sync/sync_${i}.txt
             str_file=${dir}${suffix}
             # run with sync
-            stress-ng --hdd N --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
+            stress-ng --hdd $i --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
+            echo $str_file
+
             wait
         done
     fi
