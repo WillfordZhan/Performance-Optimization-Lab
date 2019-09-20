@@ -132,29 +132,37 @@ function task_1_4()
 
 function task_2_1()
 {
-    echo "run brk"
     dir="./task_4_2_1"
-    
-    if [[ $1 == "growth" ]]; then
+    if [[ $1 == "-growth" ]]; then
+        echo "run brk with heap growth"
         growth_size=( 4K 8K 16K 32K 64K 128K 256K 512K 1024K )
         for size in "${growth_size[@]}"
         do
-            suffix=/brk/growth_${size}.txt
+            
+            suffix=/growth/growth_${size}.txt
             str_file=${dir}${suffix}
-            # stress-ng --bigheap 2 --bigheap-growth $size --metrics-brief --perf -t 60s --log-file $str_file &
-            echo $size
+            stress-ng --bigheap 2 --bigheap-growth $size --metrics-brief --perf -t 60s --log-file $str_file &
             wait
         done
     else
+        echo "run brk without growth"
         brk_num=( 2 4 8 )
         run_num=5
+        run_
         for num in "${brk_num[@]}"
         do
             for (( i=1; i<=$run_num; i++ ))
             do
-                suffix=/brk/brk_${num}_${i}run.txt
-                str_file=${dir}${suffix}
-                stress-ng --brk $num --stack $num --bigheap $num --metrics-brief --perf -t 60s --log-file $str_file &            
+                suffix=${num}_${i}run.txt
+                str_file=${dir}/brk/brk/brk_${suffix}
+                sar_file=${dir}/brk/sar/sar_${suffix}
+                top_file=${dir}/brk/top/top_${suffix}
+                # run str
+                stress-ng --brk $num --stack $num --bigheap $num --metrics-brief --perf -t 60s --log-file $str_file &
+                # run sar
+                sar -P ALL 1 60 > $sar_file &
+                # run top
+                top -b -n 60 -d 1 > $top_file &          
                 wait
             done
         done
