@@ -1,10 +1,12 @@
 #!/bin/bash
-sar_pre="./sar/sar_"
-top_pre="./top/top_"
-str_pre="./str/str_"
 
 function task_1_1()
 {
+    dir="./task_4_1_1"
+    sar_pre="${dir}/sar/sar_"
+    top_pre="${dir}/top/top_"
+    str_pre="${dir}/str/str_"
+
     cpu_stressor_num=$1
     run_time=$2
     shift 2
@@ -54,26 +56,38 @@ function task_1_1()
 
 function task_1_2()
 {
+    for crypt_num in {1..8} do
+        for i in {1..5} do
+            suffix=${crypt_num}_${i}run_txt
+            echo $suffix
+            # stress-ng --crypt $crypt_num --metrics-brief --perf -t 10s &
+            wait
+        done
+    done
     exit 1
 }
 
 function task_1_3()
 {
+
     exit 1
 }
 
 function task_1_4()
 {
+
     exit 1
 }
 
 function task_2_1()
 {
+
     exit 1
 }
 
 function task_3_1()
 {
+
     exit 1
 }
 
@@ -90,6 +104,7 @@ do
       (-crypt)
           echo "Task 1.2"
           shift
+          task_1_2 $@
           break
           ;;
       (-matrix)
