@@ -199,43 +199,58 @@ function task_3_1()
     exit 1
 }
 
+a=`pwd`
+a=$a/task_4_1_1
+if [ ! -d "$a" ]; then
+    echo "creating dir"
+    mkdir -p ./task_4_1_1/{sar,top,str}
+    mkdir -p ./task_4_1_2/{crypt,crypt-ops}
+    mkdir ./task_4_1_3
+    mkdir ./task_4_1_4
+    mkdir -p ./task_4_2_1/{brk,growth}
+    mkdir -p ./task_4_3_1/{hdd,sync}
+fi
+
 while :
 do
     case "$1" in
-      (-cpu)
-          echo "Task 1.1"
-          shift
-          task_1_1 $@
-          break
-          ;;
-
-      (-crypt)
-          echo "Task 1.2"
-          shift
-          task_1_2 $@
-          break
-          ;;
-      (-matrix)
-          echo "Task 1.3"
-          task_1_3 $@
-          break
-           ;;
-      (-pthread) 
-          echo "Task 1.4"
-          task_1_4 $@
-          break
-          ;;
-      (-brk)
-          echo "Task 2.1"
-          shift
-          task_2_1 $@
-          break
-          ;;
-      (-hdd)  
-          echo "Task 3.1"
-          shift
-          task_3_1 $@
-          break
-          ;;
+        (-cpu)
+            echo "Task 1.1"
+            shift
+            task_1_1 $@
+            break
+            ;;
+        (-crypt)
+            echo "Task 1.2"
+            shift
+            task_1_2 $@
+            break
+            ;;
+        (-matrix)
+            echo "Task 1.3"
+            task_1_3 $@
+            break
+            ;;
+        (-pthread) 
+            echo "Task 1.4"
+            task_1_4 $@
+            break
+            ;;
+        (-brk)
+            echo "Task 2.1"
+            shift
+            task_2_1 $@
+            break
+            ;;
+        (-hdd)  
+            echo "Task 3.1"
+            shift
+            task_3_1 $@
+            break
+            ;;
+        (-*)
+            echo "usage"
+            break
+            ;;
     esac
 done
