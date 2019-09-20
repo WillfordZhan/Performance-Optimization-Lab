@@ -170,7 +170,7 @@ function task_2_1()
                 # run str
                 stress-ng --brk $num --stack $num --bigheap $num --metrics-brief --perf -t 60s --log-file $str_file &
                 # run sar
-                sar -P ALL 1 60 > $sar_file &
+                sar -r 1 60 > $sar_file &
                 # run top
                 top -b -n 60 -d 1 > $top_file &          
                 wait
