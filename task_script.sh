@@ -7,6 +7,7 @@ function task_1_1()
     top_pre="${dir}/top/top_"
     str_pre="${dir}/str/str_"
 
+    interval=1
     cpu_stressor_num=$1
     run_time=$2
     shift 2
@@ -47,9 +48,9 @@ function task_1_1()
     top_file=${top_pre}${suffix}
 
     # run sar
-    sar -P ALL 1 $run_time > $sar_file &
+    sar -P ALL $interval $run_time > $sar_file &
     # run top
-    top -b -n $run_time -d 1 > $top_file &
+    top -b -n $run_time -d $interval > $top_file &
     wait
     exit 1
 }
@@ -57,13 +58,15 @@ function task_1_1()
 function task_1_2()
 {   
     dir="./task_4_1_2"
-    
+    crypt_num=8
+    run_num=5
+
     if [[ $1 == "-crypt-ops" ]]; then
-        for crypt_num in {1..8} 
+        for (( j=1; j<=$crypt_num; j++ ))
         do
-            for i in {1..5} 
+            for (( i=1; i<=$run_num; i++ ))
             do
-                suffix=/crypt-ops/cryptops_${crypt_num}_${i}run.txt
+                suffix=/crypt-ops/cryptops_${j}_${i}run.txt
                 # run with crypt-ops
                 str_file=${dir}${suffix}
                 stress-ng --crypt $crypt_num --crypt-ops 8000 --metrics-brief --perf -t 10s --log-file $str_file &
@@ -71,11 +74,11 @@ function task_1_2()
             done
         done
     else
-        for crypt_num in {1..8} 
+        for (( j=1; j<=$crypt_num; j++ ))
         do
-            for i in {1..5} 
+            for (( i=1; i<=$run_num; i++ ))
             do
-                suffix=/crypt/crypt_${crypt_num}_${i}run.txt
+                suffix=/crypt/crypt_${j}_${i}run.txt
                 str_file=${dir}${suffix}
                 # run simple crypt
                 stress-ng --crypt $crypt_num --metrics-brief --perf -t 10s --log-file $str_file &
@@ -88,7 +91,20 @@ function task_1_2()
 
 function task_1_3()
 {
-
+    dir="./task_4_1_3"
+    matrix_num=( 2 4 8 )
+    matrix_size=( 128 256 512 )
+    for num in "${matrix_num[@]}"
+    do
+        for size in  "${matrix_size[@]}"
+        do
+            suffix=/matrix_${num}_size${size}.txt
+            str_file=${dir}${suffix}
+            stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf -t 10s --log-file $str_file &
+            wait
+        done
+    done
+    
     exit 1
 }
 
@@ -128,7 +144,7 @@ do
           ;;
       (-matrix)
           echo "Task 1.3"
-          
+          task_1_3 $@
           shift
           break
            ;;
