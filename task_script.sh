@@ -1,4 +1,13 @@
 #!/bin/bash
+function usage()
+{
+    echo "Task1.1: -cpu <cpu_cores> <runtime> [-load] <load_percent> [-backoff] <backoff_time>"
+    echo "Task1.2: -crypt [-crypt-ops]"
+    echo "Task1.3: -matrix"
+    echo "Task1.4: -pthread"
+    echo "Task2.1: -brk [-growth]"
+    echo "Task3.1: -hdd [-sync]"
+}
 
 function task_1_1()
 {
@@ -7,9 +16,10 @@ function task_1_1()
     top_pre="${dir}/top/top_"
     str_pre="${dir}/str/str_"
 
-    interval=1
     cpu_stressor_num=$1
     run_time=$2
+    interval=1
+
     shift 2
 
     # the common suffix of files
@@ -249,7 +259,7 @@ do
             break
             ;;
         (-*)
-            echo "usage"
+            usage
             break
             ;;
     esac
