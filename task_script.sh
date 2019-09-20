@@ -172,7 +172,27 @@ function task_2_1()
 
 function task_3_1()
 {
-
+    dir="./task_4_3_1"
+    hdd_num=16
+    if [[ $1 != "-sync" ]]; then
+        for (( i=1; i<=$hdd_num; i++ ))
+        do
+            suffix=/hdd/hdd_${i}.txt
+            str_file=${dir}${suffix}
+            # run without sync
+            stress-ng --hdd N --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
+            wait
+        done
+    else
+        for (( i=1; i<=$hdd_num; i++ ))
+        do
+            suffix=/sync/sync_${i}.txt
+            str_file=${dir}${suffix}
+            # run with sync
+            stress-ng --hdd N --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
+            wait
+        done
+    fi
     exit 1
 }
 
@@ -210,8 +230,8 @@ do
           ;;
       (-hdd)  
           echo "Task 3.1"
-          task_3_1 $@
           shift
+          task_3_1 $@
           break
           ;;
     esac
