@@ -62,6 +62,7 @@ function task_1_2()
     run_num=5
 
     if [[ $1 == "-crypt-ops" ]]; then
+        echo "run with crypt-ops"
         for (( j=1; j<=$crypt_num; j++ ))
         do
             for (( i=1; i<=$run_num; i++ ))
@@ -74,6 +75,7 @@ function task_1_2()
             done
         done
     else
+        echo "run without crypt-ops"
         for (( j=1; j<=$crypt_num; j++ ))
         do
             for (( i=1; i<=$run_num; i++ ))
@@ -91,6 +93,7 @@ function task_1_2()
 
 function task_1_3()
 {
+    echo "run matrix"
     dir="./task_4_1_3"
     matrix_num=( 2 4 8 )
     matrix_size=( 128 256 512 )
@@ -110,13 +113,52 @@ function task_1_3()
 
 function task_1_4()
 {
-
+    echo "run pthread"
+    dir="./task_4_1_4"
+    pthread_num=( 2 4 8 12 16)
+    run_num=5
+    for num in "${pthread_num[@]}"
+    do
+        for (( i=1; i<=$run_num; i++ ))
+        do
+            suffix=/pthread_${num}_${i}run.txt
+            str_file=${dir}${suffix}
+            stress-ng --pthread $num --pthread-ops 1000000 --pthread-max 64 --perf --metrics-brief -t 40s --log-file $str_file &            
+            wait
+        done
+    done
     exit 1
 }
 
 function task_2_1()
 {
-
+    echo "run brk"
+    dir="./task_4_2_1"
+    
+    if [[ $1 == "growth" ]]; then
+        growth_size=( 4K 8K 16K 32K 64K 128K 256K 512K 1024K )
+        for size in "${growth_size[@]}"
+        do
+            suffix=/brk/growth_${size}.txt
+            str_file=${dir}${suffix}
+            # stress-ng --bigheap 2 --bigheap-growth $size --metrics-brief --perf -t 60s --log-file $str_file &
+            echo $size
+            wait
+        done
+    else
+        brk_num=( 2 4 8 )
+        run_num=5
+        for num in "${brk_num[@]}"
+        do
+            for (( i=1; i<=$run_num; i++ ))
+            do
+                suffix=/brk/brk_${num}_${i}run.txt
+                str_file=${dir}${suffix}
+                stress-ng --brk $num --stack $num --bigheap $num --metrics-brief --perf -t 60s --log-file $str_file &            
+                wait
+            done
+        done
+    fi
     exit 1
 }
 
@@ -145,24 +187,22 @@ do
       (-matrix)
           echo "Task 1.3"
           task_1_3 $@
-          shift
           break
            ;;
       (-pthread) 
           echo "Task 1.4"
-          
-          shift
+          task_1_4 $@
           break
           ;;
       (-brk)
           echo "Task 2.1"
-          
           shift
+          task_2_1 $@
           break
           ;;
       (-hdd)  
           echo "Task 3.1"
-          
+          task_3_1 $@
           shift
           break
           ;;
