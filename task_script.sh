@@ -158,7 +158,6 @@ function task_2_1()
         echo "run brk without growth"
         brk_num=( 2 4 8 )
         run_num=5
-        run_
         for num in "${brk_num[@]}"
         do
             for (( i=1; i<=$run_num; i++ ))
