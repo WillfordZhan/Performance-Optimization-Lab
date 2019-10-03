@@ -217,7 +217,7 @@ if [ ! -d "$a" ]; then
     mkdir -p ./task_4_1_2/{crypt,crypt-ops}
     mkdir ./task_4_1_3
     mkdir ./task_4_1_4
-    mkdir -p ./task_4_2_1/{brk,growth}
+    mkdir -p ./task_4_2_1/{brk/{brk,sar,top},growth}
     mkdir -p ./task_4_3_1/{hdd,sync}
 fi
 
