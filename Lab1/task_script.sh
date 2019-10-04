@@ -198,7 +198,7 @@ function task_3_1()
         do
             suffix=hdd_${i}.txt
             str_file=${dir}/hdd/str/str_${suffix}
-            io_file=${dir}$/hdd/io/io_${suffix}
+            io_file=${dir}/hdd/io/io_${suffix}
             # run without sync
             stress-ng --hdd $i --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
             # run iostat
