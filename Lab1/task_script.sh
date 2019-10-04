@@ -210,7 +210,8 @@ function task_3_1()
         for (( i=1; i<=$hdd_num; i++ ))
         do
             suffix=sync_${i}.txt
-            str_file=${dir}${suffix}
+            str_file=${dir}/sync/str/str_${suffix}
+            io_file=${dir}/sync/io/io_${suffix}
             # run with sync
             stress-ng --hdd $i --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
             # run iostat
