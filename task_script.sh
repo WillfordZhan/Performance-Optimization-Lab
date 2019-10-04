@@ -113,7 +113,7 @@ function task_1_3()
         do
             suffix=/matrix_${num}_size${size}.txt
             str_file=${dir}${suffix}
-            stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf -t 10s --log-file $str_file &
+            stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf --log-file $str_file &
             wait
         done
     done
@@ -133,7 +133,7 @@ function task_1_4()
         do
             suffix=/pthread_${num}_${i}run.txt
             str_file=${dir}${suffix}
-            stress-ng --pthread $num --pthread-ops 1000000 --pthread-max 64 --perf --metrics-brief -t 40s --log-file $str_file &            
+            stress-ng --pthread $num --pthread-ops 1000000 --pthread-max 64 --perf --metrics-brief --log-file $str_file &            
             wait
         done
     done
