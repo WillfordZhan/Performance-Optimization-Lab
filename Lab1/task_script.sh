@@ -153,7 +153,7 @@ function task_2_1()
         do
             
             suffix=growth_${size}.txt
-            str_file=${dir}/growth/brk/growth_${suffix}
+            str_file=${dir}/growth/growth/growth_${suffix}
             sar_file=${dir}/growth/sar/sar_${suffix}
             top_file=${dir}/growth/top/top_${suffix}
             #run str
@@ -161,7 +161,7 @@ function task_2_1()
             # run sar
             sar -r 1 60 > $sar_file &
             # run top
-            top -b -n 60 -d 1 > $top_file & 
+            top -H -b -n 60 -d 1 > $top_file & 
             wait
         done
     else
@@ -181,7 +181,7 @@ function task_2_1()
                 # run sar
                 sar -r 1 60 > $sar_file &
                 # run top
-                top -b -n 60 -d 1 > $top_file &          
+                top -H -b -n 60 -d 1 > $top_file &          
                 wait
             done
         done
@@ -196,17 +196,20 @@ function task_3_1()
     if [[ $1 != "-sync" ]]; then
         for (( i=1; i<=$hdd_num; i++ ))
         do
-            suffix=/hdd/hdd_${i}.txt
-            str_file=${dir}${suffix}
+            suffix=hdd_${i}.txt
+            str_file=${dir}/hdd/str/str_${suffix}
+            io_file=${dir}$/hdd/io/io_${suffix}
             # run without sync
             stress-ng --hdd $i --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
+            # run iostat
+            iostat -x sda -c 2 -t > .log &
             echo $str_file
             wait
         done
     else
         for (( i=1; i<=$hdd_num; i++ ))
         do
-            suffix=/sync/sync_${i}.txt
+            suffix=sync_${i}.txt
             str_file=${dir}${suffix}
             # run with sync
             stress-ng --hdd $i --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
@@ -226,7 +229,7 @@ if [ ! -d "$a" ]; then
     mkdir ./task_4_1_3
     mkdir ./task_4_1_4
     mkdir -p ./task_4_2_1/{brk/{brk,sar,top},growth/{growth,sar,top}}
-    mkdir -p ./task_4_3_1/{hdd,sync}
+    mkdir -p ./task_4_3_1/{hdd/{str,io},sync/{str,io}}
 fi
 
 while :
