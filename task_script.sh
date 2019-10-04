@@ -80,7 +80,7 @@ function task_1_2()
                 suffix=/crypt-ops/cryptops_${j}_${i}run.txt
                 # run with crypt-ops
                 str_file=${dir}${suffix}
-                stress-ng --crypt $crypt_num --crypt-ops 8000 --metrics-brief --perf -t 10s --log-file $str_file &
+                stress-ng --crypt $crypt_num --crypt-ops 8000 --metrics-brief --perf --log-file $str_file &
                 wait
             done
         done
@@ -113,7 +113,7 @@ function task_1_3()
         do
             suffix=/matrix_${num}_size${size}.txt
             str_file=${dir}${suffix}
-            stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf --log-file $str_file &
+            stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf -t 10s --log-file $str_file &
             wait
         done
     done
@@ -201,7 +201,6 @@ function task_3_1()
             # run with sync
             stress-ng --hdd $i --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
             echo $str_file
-
             wait
         done
     fi
