@@ -152,9 +152,16 @@ function task_2_1()
         for size in "${growth_size[@]}"
         do
             
-            suffix=/growth/growth_${size}.txt
-            str_file=${dir}${suffix}
+            suffix=growth_${size}.txt
+            str_file=${dir}/growth/brk/growth_${suffix}
+            sar_file=${dir}/growth/sar/sar_${suffix}
+            top_file=${dir}/growth/top/top_${suffix}
+            #run str
             stress-ng --bigheap 2 --bigheap-growth $size --metrics-brief --perf -t 60s --log-file $str_file &
+            # run sar
+            sar -r 1 60 > $sar_file &
+            # run top
+            top -b -n 60 -d 1 > $top_file & 
             wait
         done
     else
@@ -218,7 +225,7 @@ if [ ! -d "$a" ]; then
     mkdir -p ./task_4_1_2/{crypt,crypt-ops}
     mkdir ./task_4_1_3
     mkdir ./task_4_1_4
-    mkdir -p ./task_4_2_1/{brk/{brk,sar,top},growth}
+    mkdir -p ./task_4_2_1/{brk/{brk,sar,top},growth/{growth,sar,top}}
     mkdir -p ./task_4_3_1/{hdd,sync}
 fi
 
