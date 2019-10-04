@@ -202,7 +202,7 @@ function task_3_1()
             # run without sync
             stress-ng --hdd $i --hdd-opts wr-rnd --metrics-brief -t 20s --log-file $str_file &
             # run iostat
-            iostat -x sda -c 2 -t > .log &
+            iostat -x sda -c 1 -t 20s > $io_file &
             echo $str_file
             wait
         done
@@ -213,6 +213,8 @@ function task_3_1()
             str_file=${dir}${suffix}
             # run with sync
             stress-ng --hdd $i --hdd-opts wr-rnd, sync --metrics-brief -t 20s --log-file $str_file &
+            # run iostat
+            iostat -x sda -c 1 -t 20s > $io_file &
             echo $str_file
             wait
         done
