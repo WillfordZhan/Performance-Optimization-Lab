@@ -57,7 +57,7 @@ function task_1_1()
     sar_file=${sar_pre}${suffix}
     top_file=${top_pre}${suffix}
 
-    # run sar
+    # run sar cpu
     sar -P ALL $interval $run_time > $sar_file &
     # run top
     top -b -n $run_time -d $interval > $top_file &
@@ -111,9 +111,12 @@ function task_1_3()
     do
         for size in  "${matrix_size[@]}"
         do
-            suffix=/matrix_${num}_size${size}.txt
-            str_file=${dir}${suffix}
+            suffix=matrix_${num}_size${size}.txt
+            sar_file=${dir}/sar/sar_${suffix}
+            str_file=${dir}/str/str_${suffix}
             stress-ng --matrix $num --matrix-method prod --matrix-size $size --metrics-brief --perf -t 10s --log-file $str_file &
+            # run sar memory consumption
+            sar -r 1 10 > $sar_file &
             wait
         done
     done
