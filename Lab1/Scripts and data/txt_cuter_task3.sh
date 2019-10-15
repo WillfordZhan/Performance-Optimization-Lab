@@ -27,7 +27,7 @@ do
   echo $result >> cache_misses.txt
 
   # pick bogo ops 
-  data=`nl $file | sed -n '6p' | awk {'print $6'}’`
+  data=`nl $file | sed -n '7p' | awk {'print $6'}’`
   result="$file,$data"
   echo $result >> bogo.csv
 done
