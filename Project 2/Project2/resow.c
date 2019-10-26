@@ -95,22 +95,34 @@ int main(int argc, char **argv){
     // create_dataset(dataSize, filename);
     // printf("-------------Creation Over-------------\n");
     
+    
     printf("-------------loading dataset-------------\n");
+    clock_t beforeLoad = clock();
     load_dataSet(dataSet,dataSize,recordSize,filename);
+    clock_t afterLoad = clock();
     printf("-------------Loading Over-------------\n");
 
+    
     printf("-------------Sorting dataset-------------\n");
+    clock_t beforeSort = clock();
     selection_sort(dataSet,dataSize);
+    clock_t afterSort = clock();
     printf("-------------Sorting Over-------------\n");
 
     printf("-------------Writing dataset-------------\n");
+    clock_t beforeWrite = clock();
     write_dataSet(dataSet,dataSize,recordSize,"result");
+    clock_t afterWrite = clock();
     printf("-------------Writing Over-------------\n");
-    
-    for (int i = 0; i < dataSize; i++)
-    {
-        printf("%f\n",*(dataSet+i));
-    }
+
+    // calculate time consumed by each phase
+    float loadTime = (float)((afterLoad - beforeLoad)/CLOCKS_PER_SEC);
+    float sortTime = (float)((afterSort - beforeSort)/CLOCKS_PER_SEC);
+    float writeTime = (float)((afterWrite - beforeWrite)/CLOCKS_PER_SEC);
+
+    printf("Load Time: %f s\n",loadTime);
+    printf("Sort Time: %f s\n",sortTime);
+    printf("Write Time: %f s\n",writeTime);
 
     free(dataSet);
     return 0;
