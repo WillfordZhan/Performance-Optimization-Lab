@@ -99,11 +99,14 @@ int main(int argc, char **argv){
     load_dataSet(dataSet,dataSize,recordSize,filename);
     printf("-------------Loading Over-------------\n");
 
+    printf("-------------Sorting dataset-------------\n");
+    selection_sort(dataSet,dataSize);
+    printf("-------------Sorting Over-------------\n");
+
     printf("-------------Writing dataset-------------\n");
     write_dataSet(dataSet,dataSize,recordSize,"result");
     printf("-------------Writing Over-------------\n");
-
-    return 1;
+    
     for (int i = 0; i < dataSize; i++)
     {
         printf("%f\n",*(dataSet+i));
