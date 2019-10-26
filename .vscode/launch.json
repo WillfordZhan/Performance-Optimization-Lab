@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - closedModel",
+            "request": "launch",
+            "mainClass": "closedModel",
+            "projectName": "Performance-Optimization-Lab_85aabdc7"
+        }
+    ]
+}
