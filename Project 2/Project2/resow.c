@@ -19,8 +19,8 @@ void create_dataset(int dataSize, char* filename){
     for (int i = 0; i < dataSize; i++)
     {
         data[i] = get_Random(100);
-        printf("%f\n",data[i]);
     }
+
     fwrite(data, sizeof(float), dataSize, fp);
     free(data);
     fclose(fp);
@@ -57,20 +57,19 @@ int main(int argc, char **argv){
 
     dataSet = malloc(sizeof(float)* dataSize);
 
-    printf("creating dataset\n");
-    create_dataset(dataSize, filename);
-    printf("-------------Creation Over-------------\n");
+    // printf("creating dataset\n");
+    // create_dataset(dataSize, filename);
+    // printf("-------------Creation Over-------------\n");
     
-    return 1;
     printf("loading dataset\n");
     load_dataSet(dataSet,dataSize,recordSize,filename);
     printf("-------------Loading Over-------------\n");
-    printf("%f\n",*dataSet);
-    return 1;
+
     for (int i = 0; i < dataSize; i++)
     {
         printf("%f\n",*(dataSet+i));
     }
+    
     free(dataSet);
     return 0;
 }
