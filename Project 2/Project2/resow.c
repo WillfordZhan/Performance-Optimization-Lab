@@ -3,10 +3,21 @@
 #include <string.h>
 #include <time.h>
 
+// ------- Tool functions -------
+
+int compareFloat (const void * a, const void * b)
+{
+  if ( *(float*)a <  *(float*)b ) return -1;
+  if ( *(float*)a == *(float*)b ) return 0;
+  if ( *(float*)a >  *(float*)b ) return 1;
+}
+
 float get_Random(float rmax){
     float x = ((float)rand()/(float)RAND_MAX)*rmax;
     return x;
 }
+
+// ------- pseudo code implementation -------
 
 void create_dataset(int dataSize, char* filename){
     // rule of thumb: seed only once
@@ -40,6 +51,20 @@ void load_dataSet(float *dataSet, int dataSize, int recordSize, char *filename){
     fclose(fp);
 }
 
+void write_dataSet(float *dataSet, int dataSize, int recordSize, char *filename){
+    FILE *fp;
+    fp = fopen(filename,"wb");
+    for (int i = 0; i < dataSize; i+= recordSize)
+    {
+        if (recordSize > dataSize - i)
+        {
+            recordSize = dataSize - i;
+        }
+        fwrite(dataSet+i, sizeof(float), recordSize, fp);
+    }
+    fclose(fp);
+}
+
 void swap(float *xp, float *yp){
     float temp = *xp;
     *xp = *yp;
@@ -60,19 +85,13 @@ void selection_sort(float *dataSet, int dataSize){
     }
 }
 
-void write_dataSet(float *dataSet, int dataSize, int recordSize, char *filename){
-    FILE *fp;
-    fp = fopen(filename,"wb");
-    for (int i = 0; i < dataSize; i+= recordSize)
-    {
-        if (recordSize > dataSize - i)
-        {
-            recordSize = dataSize - i;
-        }
-        fwrite(dataSet+i, sizeof(float), recordSize, fp);
-    }
-    fclose(fp);
+// ------- 2 sorting algorithms for optimization -------
+
+void quick_sort(float *dataSet, int dataSize){
+    qsort(dataSet, dataSize,sizeof(float),compareFloat);
 }
+
+
 
 int main(int argc, char **argv){
     int recordSize, dataSize;
@@ -81,7 +100,7 @@ int main(int argc, char **argv){
 
     if (argc != 4)
     {
-        printf("Usage: resow.c <dataSize> <recordSize> <filename>\n");
+        printf("Usage: resow.c <dataSize> <bufferSize> <filename>\n");
         exit(1);
     }
     
@@ -92,7 +111,7 @@ int main(int argc, char **argv){
     dataSet = malloc(sizeof(float)* dataSize);
 
     // printf("creating dataset\n");
-    // create_dataset(dataSize, filename);
+    create_dataset(dataSize, filename);
     // printf("-------------Creation Over-------------\n");
     
     
@@ -116,9 +135,9 @@ int main(int argc, char **argv){
     printf("-------------Writing Over-------------\n");
 
     // calculate time consumed by each phase
-    float loadTime = (float)((afterLoad - beforeLoad)/CLOCKS_PER_SEC);
-    float sortTime = (float)((afterSort - beforeSort)/CLOCKS_PER_SEC);
-    float writeTime = (float)((afterWrite - beforeWrite)/CLOCKS_PER_SEC);
+    float loadTime = (float)(afterLoad - beforeLoad)/CLOCKS_PER_SEC;
+    float sortTime = (float)(afterSort - beforeSort)/CLOCKS_PER_SEC;
+    float writeTime = (float)(afterWrite - beforeWrite)/CLOCKS_PER_SEC;
 
     printf("Load Time: %f s\n",loadTime);
     printf("Sort Time: %f s\n",sortTime);
