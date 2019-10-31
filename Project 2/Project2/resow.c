@@ -10,6 +10,7 @@ int compareFloat (const void * a, const void * b)
   if ( *(float*)a <  *(float*)b ) return -1;
   if ( *(float*)a == *(float*)b ) return 0;
   if ( *(float*)a >  *(float*)b ) return 1;
+  return 2;
 }
 
 float get_Random(float rmax){
@@ -83,15 +84,60 @@ void selection_sort(float *dataSet, int dataSize){
         // Swap the found minimum element with the first element
         swap(&dataSet[min_idx], &dataSet[i]);
     }
+
 }
 
+float max(float *dataSet, int dataSize){
+    float max = 0.0;
+    for (int i = 0; i < dataSize; i++)
+    {
+        if (dataSet[i] > max)
+            max = dataSet[i];
+    }
+    return max;
+}
+
+float min(float *dataSet, int dataSize){
+    float min = 100.0;
+    for (int i = 0; i < dataSize; i++)
+    {
+        if (dataSet[i] < min)
+            min = dataSet[i];
+    }
+    return min;
+}
+
+float average(float *dataSet, int dataSize){
+    float sum = 0;
+    for (int i = 0; i < dataSize; i++)
+    {
+        sum += dataSet[i];
+    }
+    return sum/dataSize;
+}
+
+
 // ------- 2 sorting algorithms for optimization -------
+
+void insertion_sort(float *dataset, int n)  
+{  
+    int i, key, j;  
+    for (i = 1; i < n; i++) 
+    {  
+        key = dataset[i];  
+        j = i - 1;  
+        while (j >= 0 && dataset[j] > key) 
+        {  
+            dataset[j + 1] = dataset[j];  
+            j = j - 1;  
+        }  
+        dataset[j + 1] = key;  
+    }  
+}  
 
 void quick_sort(float *dataSet, int dataSize){
     qsort(dataSet, dataSize,sizeof(float),compareFloat);
 }
-
-
 
 int main(int argc, char **argv){
     int recordSize, dataSize;
@@ -124,7 +170,9 @@ int main(int argc, char **argv){
     
     printf("-------------Sorting dataset-------------\n");
     clock_t beforeSort = clock();
-    selection_sort(dataSet,dataSize);
+    //selection_sort(dataSet,dataSize);
+    //insertion_sort(dataSet,dataSize);
+    quick_sort(dataSet,dataSize);
     clock_t afterSort = clock();
     printf("-------------Sorting Over-------------\n");
 
@@ -142,6 +190,9 @@ int main(int argc, char **argv){
     printf("Load Time: %f s\n",loadTime);
     printf("Sort Time: %f s\n",sortTime);
     printf("Write Time: %f s\n",writeTime);
+    printf("Max Value: %f \n", max(dataSet,dataSize));
+    printf("Min Value: %f \n", min(dataSet,dataSize));
+    printf("Average Value: %f \n", average(dataSet,dataSize));
 
     free(dataSet);
     return 0;
